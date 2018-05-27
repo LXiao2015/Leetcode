@@ -1,0 +1,46 @@
+/**
+ * // This is the Master's API interface.
+ * // You should not implement it, or speculate about its implementation
+ * class Master {
+ *   public:
+ *     int guess(string word);
+ * };
+ */
+
+class Solution {
+public:
+    void findSecretWord(vector<string>& wordlist, Master& master) {
+        
+        int num = 1;
+
+        string next = wordlist[rand()%wordlist.size()];    // 原本取第一个，超过限制次数，改为随机选词，Accepted
+        int res = master.guess(next);
+        while(res != 6) {
+            cout<<"res:"<<res<<endl;
+            num++;
+            vector<string> tmplist;
+            for(string word : wordlist) {    // 根据 res 缩小选择范围，更新 wordlist
+                if(myMaster(next, word) == res) tmplist.push_back(word);
+            }
+            cout<<"tmplist长度"<<tmplist.size()<<endl;
+            wordlist = tmplist;
+            next = tmplist[rand()%wordlist.size()];    // 原本取第一个，超过限制次数，改为随机选词，Accepted
+            
+            for(string word : wordlist) {
+                cout<<word<<" ";
+            }
+            
+            res = master.guess(next);
+        }
+        cout<<num<<endl;
+    }
+    
+    int myMaster(string secret, string word) {    // 计算两个词有几个位置的字符相同
+        int count = 0;
+        for(int i = 0; i < 6; ++i) {
+            if(secret[i] == word[i]) count++;
+        }
+        return count;
+    }
+};
+
