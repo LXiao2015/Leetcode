@@ -1,0 +1,29 @@
+class Solution {
+public:
+    bool canVisitAllRooms(vector<vector<int>>& rooms) {
+        int N = rooms.size();
+        vector<int> visited(N, 0);    // 标记已访问房间
+        visited[0] = 1;
+        deque<int> Q;
+        Q.push_back(0);    // 注意队列在队尾加入元素是 push_back
+        
+        while(!Q.empty()) {
+            int cur = Q.front();
+            Q.pop_front();    // // 注意队列在队头弹出元素是 pop_front
+
+            int l = rooms[cur].size();
+            while(l--) {
+                if(visited[rooms[cur][l]] != 1) {
+                    Q.push_back(rooms[cur][l]);
+                    visited[rooms[cur][l]] = 1;
+                }
+            }
+        }
+        
+        for(int i = 0; i < N; ++i) {
+            if(visited[i] == 0) return false;
+        }
+        
+        return true;
+    }
+};
