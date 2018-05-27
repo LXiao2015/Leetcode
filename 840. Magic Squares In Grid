@@ -1,0 +1,45 @@
+// https://leetcode.com/problems/magic-squares-in-grid/description/
+
+class Solution {
+public:
+    int numMagicSquaresInside(vector<vector<int>>& grid) {
+        
+        int m = grid.size(), n = grid[0].size(), res = 0;
+
+        if(m < 3 || n < 3) return 0;    // 不足以构成 3×3 矩阵
+        for(int i = 0; i < m - 2; ++i) {
+            for(int j = 0; j < n - 2; ++j) {
+                if(isMagicGrid(i, j, grid)) res += 1;
+            }
+        }
+        return res;
+    }
+    
+    bool isMagicGrid(int i, int j, vector<vector<int>>& grid) {
+        vector<int> exist(16, 0);    // 统计数字出现的个数
+        
+        if(grid[i+1][j+1] != 5) return false;    // 中心数字必须为 5
+        
+        for(int ii = i; ii < i + 3; ++ii) {
+            for(int jj = j; jj < j + 3; ++jj) {
+                exist[grid[ii][jj]]++;
+            }
+        }
+        
+        for(int ii = 1; ii <= 9; ++ii) {    // 3×3 矩阵内 1~9 出现且仅出现一次
+            if(exist[ii] != 1) return false;
+        }
+        cout<<endl;
+        
+        // 与中心元素差的绝对值相同
+        if(abs(grid[i][j] - grid[i+1][j+1]) != abs(grid[i+2][j+2] - grid[i+1][j+1]) || 
+           abs(grid[i][j+1] - grid[i+1][j+1]) != abs(grid[i+2][j+1] - grid[i+1][j+1]) || 
+           abs(grid[i][j+2] - grid[i+1][j+1]) != abs(grid[i+2][j] - grid[i+1][j+1]) || 
+           abs(grid[i][j+1] - grid[i+1][j+1]) != abs(grid[i+2][j+1] - grid[i+1][j+1])) 
+        {
+            return false;
+        }
+        
+        return true;
+    }
+};
